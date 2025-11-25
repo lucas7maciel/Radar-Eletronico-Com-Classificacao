@@ -1,0 +1,34 @@
+mainmenu "Radar demo"
+
+source "Kconfig.zephyr"
+
+menu "Radar demo options"
+
+config RADAR_SENSOR_DISTANCE_MM
+	int "Distancia entre sensores (mm)"
+	default 4000
+	help
+	  Usada para calcular a velocidade a partir do tempo entre o sensor A e o
+	  sensor B.
+
+config RADAR_SPEED_LIMIT_LIGHT_KMH
+	int "Limite de velocidade (Leve) km/h"
+	default 90
+
+config RADAR_SPEED_LIMIT_HEAVY_KMH
+	int "Limite de velocidade (Pesado) km/h"
+	default 70
+
+config RADAR_WARNING_THRESHOLD_PERCENT
+	int "Percentual para alerta (amarelo)"
+	default 90
+	range 1 100
+	help
+	  Percentual do limite que aciona estado de alerta.
+
+config RADAR_CAMERA_FAILURE_RATE_PERCENT
+	int "Taxa de falha simulada da camera (%)"
+	default 25
+	range 0 100
+
+endmenu
