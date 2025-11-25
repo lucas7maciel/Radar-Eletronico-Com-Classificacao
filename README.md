@@ -1,7 +1,7 @@
 # Radar eletronico (Zephyr)
 
 ## Introducao e Objetivos
-Radar didatico com deteccao/classificacao, display colorido (ANSI) e camera simulada via ZBUS. Pensado para `mps2_an385`, mas roda bem em `qemu_cortex_m3`/`native_sim` para desenvolvimento. O foco e consolidar RTOS (threads, sincronizacao, comunicacao), drivers (GPIO, display), e configuracao via Kconfig.
+Radar didatico com deteccao/classificacao, display colorido (ANSI) e camera simulada via ZBUS. Pensado para `mps2_an385`, mas roda bem em `qemu_cortex_m3`/`native_sim` para desenvolvimento. Foco: consolidar RTOS (threads, sincronizacao, comunicacao), drivers (GPIO, display) e configuracao via Kconfig.
 
 ## Descricao Funcional
 - Deteccao de passagem/velocidade: sensores magneticos simulados (GPIOs 5 e 6 no QEMU) detectam a passagem e calculam a velocidade.
@@ -33,13 +33,23 @@ Radar didatico com deteccao/classificacao, display colorido (ANSI) e camera simu
 - `tests/unit/*`: ztests (calculo de velocidade, classificacao, validacao de placa).
 
 ## Como compilar e executar (QEMU)
-Assumindo workspace Zephyr em `~/zephyrproject` e o app neste diretorio:
+Assumindo workspace Zephyr em `~/zephyrproject` e o app neste diretorio (WSL):
 ```sh
 cd ~/zephyrproject
+source zephyr/zephyr-env.sh   # ou o script que voce usa para ativar
 west build -b qemu_cortex_m3 -p always /mnt/c/Users/Cacacalciano/Desktop/Projetos/Projeto-Embarcados
 west build -t run
 ```
 Se sua arvore tiver a placa `mps2_an385`, troque `-b qemu_cortex_m3` por `-b mps2_an385`.
+
+## Como rodar os testes (ztest)
+Executar a suite unit em `native_sim`:
+```sh
+cd ~/zephyrproject
+source zephyr/zephyr-env.sh   # se ainda nao estiver ativo
+west twister -T /mnt/c/Users/Cacacalciano/Desktop/Projetos/Projeto-Embarcados/tests/unit -p native_sim
+```
+Resultados ficam em `twister-out/`. Use `--clobber` para limpar resultados anteriores, se precisar.
 
 ## Threads e fluxo
 - Sensores (sensor_sim_thread): simula pulsos nos sensores A/B, contando eixos e tempo entre sensores.
