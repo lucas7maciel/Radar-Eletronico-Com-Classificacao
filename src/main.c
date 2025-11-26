@@ -29,6 +29,9 @@ LOG_MODULE_REGISTER(radar, LOG_LEVEL_INF);
 
 #define ANSI_RESET "\x1B[0m"
 #define ANSI_GREEN "\x1B[32m"
+#define ANSI_BLUE "\x1B[34m"
+#define ANSI_MAGENTA "\x1B[35m"
+#define ANSI_CYAN "\x1B[36m"
 #define ANSI_YELLOW "\x1B[33m"
 #define ANSI_RED "\x1B[31m"
 
@@ -187,16 +190,24 @@ static void render_display(const struct radar_display_msg *msg)
 	}
 
 	const char *plate = (msg->plate[0] != '\0') ? msg->plate : "--";
-	const char *plate_state = "captura pendente";
+	const char *plate_state = "Captura pendente";
 
 	if (msg->plate[0] != '\0') {
-		plate_state = msg->plate_valid ? "placa ok" : "placa invalida";
+		plate_state = msg->plate_valid ? "Placa ok" : "Placa inválida";
 	}
 
-	printk("%s[Display] id:%u tipo:%s vel:%ukm/h (lim:%u alerta:%u) estado:%s placa:%s (%s)%s\n",
-	       color, msg->id, radar_vehicle_name(msg->cls.type),
-	       msg->cls.speed_kph, msg->cls.limit_kph, msg->cls.warning_kph,
-	       status, plate, plate_state, ANSI_RESET);
+	printk("%s[Display]%s Id: %s%u%s | Tipo: %s%s%s | "
+	       "Vel: %s%u%s | Km/h (Lim: %s%u%s Alerta: %s%u%s) "
+	       "Estado:%s%s%s | Placa:%s%s%s (%s)%s\n",
+	       ANSI_YELLOW, ANSI_RESET,
+	       ANSI_CYAN, msg->id, ANSI_RESET,
+	       ANSI_MAGENTA, radar_vehicle_name(msg->cls.type), ANSI_RESET,
+	       ANSI_BLUE, msg->cls.speed_kph, ANSI_RESET,
+	       ANSI_YELLOW, msg->cls.limit_kph, ANSI_RESET,
+	       ANSI_YELLOW, msg->cls.warning_kph, ANSI_RESET,
+	       color, status, ANSI_RESET,
+	       ANSI_GREEN, plate, ANSI_RESET,
+	       plate_state, ANSI_RESET);
 }
 
 static void camera_ctx_store(const struct radar_display_msg *msg)
